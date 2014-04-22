@@ -1,11 +1,12 @@
 package epamlab.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +14,12 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 import epamlab.Runnable.TransportationTask;
-import epamlab.constant.ConstantElevator;
 import epamlab.container.Floor;
 import epamlab.people.Controller;
 
@@ -33,12 +36,10 @@ public class MainWindows extends JFrame implements Runnable {
 			List<TransportationTask> transportationTask)
 			throws HeadlessException {
 		super("MainWindows");
-		Dimension size =Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension size = new Dimension(900, 800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		this.setSize(1024,740);
-		setLocation((int)((size.getWidth()-1024)/2), 
-				((int)(size.getHeight()-740)/2));
+		this.setSize(size);
 		setPreferredSize(size);
 		this.setResizable(false);
 		start = new JButton("START");
@@ -46,9 +47,10 @@ public class MainWindows extends JFrame implements Runnable {
 		start.addActionListener(headPressStartButton);
 		add(start, BorderLayout.SOUTH);
 		BuildingGraphics build = new BuildingGraphics(floors, controller, start);
+		
 		JScrollPane scroll=new JScrollPane(build);
 		add(scroll, BorderLayout.CENTER);
-		scroll.setPreferredSize(new Dimension(0,ConstantElevator.storiesNumber*200));
+		scroll.setPreferredSize(new Dimension(100,2000));
 		add(new MessageDailog(), BorderLayout.EAST);
 		this.floors = floors;
 		this.controller = controller;

@@ -22,13 +22,8 @@ public class Controller {
 	private boolean ready = false;
 	private boolean goneInto = false;
 	private boolean goneOut = false;
-	private boolean open=false;
 	private int createdPassangers = 0;
-	private Object waitingStart = new Object();
-	private Object paintLiftWaitUP=new Object();
-    private Object paintLiftWaitDown=new Object();
-	private boolean liftup=false;
-	private boolean liftDown=false;
+	private Object waiting = new Object();
 	private Logger logger = Logger.getLogger(MainWindows.class);
 	public int liftY = (ConstantElevator.storiesNumber * 200) - 200;
 
@@ -40,11 +35,6 @@ public class Controller {
 
 	}
 
-	
-	public boolean open(){
-		return open;
-	}
-	
 	public boolean getOpenDoor() {
 		return openDoor;
 	}
@@ -55,7 +45,7 @@ public class Controller {
 	}
 
 	public synchronized Object getObgect() {
-		return waitingStart;
+		return waiting;
 	}
 
 	public int getCreatedPassangers() {
@@ -97,7 +87,7 @@ public class Controller {
 	 * The method has synchronized block.
 	 */
 	public void setCreaedPassangers() {
-		synchronized (waitingStart) {
+		synchronized (waiting) {
 			createdPassangers++;
 			logger.info("Passenger was created N " + createdPassangers);
 			if (ConstantElevator.animationBoost > 0) {
@@ -106,7 +96,7 @@ public class Controller {
 			}
 			if (createdPassangers == ConstantElevator.passengersNumber) {
 				ready = true;
-				waitingStart.notify();
+				waiting.notify();
 			}
 		}
 	}
@@ -118,14 +108,14 @@ public class Controller {
 	 * The method has synchronized block.
 	 */
 	public void isReadyStart() {
-		synchronized (waitingStart) {
+		synchronized (waiting) {
 			while (!ready) {
 				try {
-					waitingStart.wait();
+					waiting.wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 		}
@@ -144,7 +134,7 @@ public class Controller {
 				floors.get(startStory - 1).getDispatchStoryContainer().wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-				System.err.println("Thred was waitingStart when aborted prossecing");
+				System.err.println("Thred was waiting when aborted prossecing");
 			}
 		}
 
@@ -162,7 +152,7 @@ public class Controller {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 		}
@@ -182,7 +172,7 @@ public class Controller {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 		}
@@ -228,7 +218,7 @@ public class Controller {
 						.wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
-				System.err.println("Thred was waitingStart when aborted prossecing");
+				System.err.println("Thred was waiting when aborted prossecing");
 			}
 
 		}
@@ -294,7 +284,7 @@ public class Controller {
 	public void pessengersGoingFromElevator(int destenationStory,
 			Passenger passenger) {
 		if (ConstantElevator.animationBoost > 0) {
-			synchronized (waitingStart) {
+			synchronized (waiting) {
 				waitUpdatePainGoneOut(passenger);
 
 			}
@@ -335,7 +325,7 @@ public class Controller {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 		}
@@ -359,7 +349,7 @@ public class Controller {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 		}
@@ -438,10 +428,9 @@ public class Controller {
 	 * The method has methods with synchronized blocks.
 	 */
 	public void movingElevator() {
-		open=false;
 		if (upDirection) {
-		    if (hasElevatorUp()) {
-				if (isElevatorEmpty() && isFloorEmpty()) {			
+			if (hasElevatorUp()) {
+				if (isElevatorEmpty() && isFloorEmpty()) {
 					elevatorUp();
 					logger
 							.info("ELEVATTOR UP ON FLOR ¹ " + currentFloor
@@ -462,6 +451,7 @@ public class Controller {
 								.getElevatorCapacity()) {
 					botherOnLevel();
 				}
+
 				elevatorUp();
 				logger.info("ELEVATTOR UP ON FLOR ¹ " + currentFloor + "\n");
 				if (ConstantElevator.animationBoost > 0) {
@@ -509,12 +499,12 @@ public class Controller {
 	public boolean isElevatorEmpty() {
 
 		if (elevator.getElevatorContainer().isEmpty()) {
-			
 			isElevatorEmpty = true;
 		} else {
 
 			isElevatorEmpty = false;
 		}
+
 		return isElevatorEmpty;
 
 	}
@@ -523,28 +513,24 @@ public class Controller {
 		curFloor = getFloor();
 		if (curFloor.getDispatchStoryContainer().isEmpty()) {
 			isLevelEmpty = true;
-			
 		} else {
-			open=true;
+
 			isLevelEmpty = false;
 		}
+
 		return isLevelEmpty;
 
 	}
 
 	private void elevatorUp() {
-		//liftY -= 200;
-		
+		liftY -= 200;
 		currentFloor++;
-		waitUpdatePainLiftUp();
 
 	}
 
 	private void elevatorDown() {
-	//	liftY += 200;
-		
+		liftY += 200;
 		currentFloor--;
-		waitUpdatePainLiftDown();
 
 	}
 
@@ -608,6 +594,15 @@ public class Controller {
 			}
 		}
 		logger.info("IT WAS CREATED PASSENGERS: "
+				+ createdPassangers+ " IT WAS NEED CREATED: "
+				+ ConstantElevator.passengersNumber + "\n");
+		if (ConstantElevator.animationBoost > 0) {
+			MessageDailog.doWriteIntoTextArea("it WAS CREATED PASSENGERS: "
+					+ createdPassangers
+					+ " IT WAS NEED CREATED: "
+					+ ConstantElevator.passengersNumber + "\n");
+		}
+		logger.info("IT WAS CREATED PASSENGERS: "
 				+  createdPassangers + " IT WAS NEED CREATED: "
 				+ ConstantElevator.passengersNumber + "\n");
 		if (ConstantElevator.animationBoost > 0) {
@@ -628,12 +623,11 @@ public class Controller {
 		synchronized (floors) {
 			if (!wasPaintGointo) {
 				try {
-					open=true;
 					floors.wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 			for (double i = 0; i > -(200 + passenger.getPassengerId() * 10); i--) {
@@ -644,7 +638,7 @@ public class Controller {
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 
@@ -665,24 +659,22 @@ public class Controller {
 		synchronized (floors) {
 			if (!wasPaintGoOut) {
 				try {
-					open=true;
 					floors.wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 			for (int i = 1; i < 580; i++) {
 				i += ConstantElevator.animationBoost;
-				open=true;
 				passenger.setX(i);
 				try {
 					floors.wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					System.err
-							.println("Thred was waitingStart when aborted prossecing");
+							.println("Thred was waiting when aborted prossecing");
 				}
 			}
 
@@ -692,83 +684,8 @@ public class Controller {
 
 	}
 
-	
 	/*
-	 * The method change coordinates lift witch  go up.
-	 *The method  has synchronized blocks.
-	 */
-	
-	public void waitUpdatePainLiftUp() {
-		synchronized (paintLiftWaitUP) {
-			if (!liftup) {
-				try {
-					open=false;
-					paintLiftWaitUP.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					System.err
-							.println("Thred was waitingStart when aborted prossecing");
-				}
-			}
-		
-			
-			for (int i=1;i<200;i++) {
-				///ConstantElevator.animationBoost;
-				open=false;
-				liftY--;		
-				try {
-					paintLiftWaitUP.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					System.err
-							.println("Thred was waitingStart when aborted prossecing");
-				}
-			}
-
-		}
-		
-		paintLiftWaitUP = false;
-
-	}
-
-	
-	/*
-	 * The method change coordinates lift witch  go down.
-	 *The method  has synchronized blocks.
-	 */
-	
-	public void waitUpdatePainLiftDown() {
-		synchronized (paintLiftWaitDown) {
-			if (!liftDown) {
-				try {
-					open=false;
-					paintLiftWaitDown.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					System.err
-							.println("Thred was waitingStart when aborted prossecing");
-				}
-			}
-			for (int i=1; i<200;i++) {
-				open=false;
-				liftY++;
-				
-				try {
-					paintLiftWaitDown.wait();;
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					System.err
-							.println("Thred was waitingStart when aborted prossecing");
-				}
-			}
-
-		}
-
-		liftDown= false;
-
-	}
-	
-	/* The method weak controller up when paint movements of passengers what is
+	 * The method weak controller up when paint movements of passengers what is
 	 * going into lift; 
 	 * The method has has synchronized blocks
 	 */
@@ -790,22 +707,5 @@ public class Controller {
 			floors.notify();
 		}
 	}
-	
-	/*
-	 * The method weak controller up when paint movements up of lift; 
-	 * The method has has synchronized blocks
-	 */
-	public void botherConsolLiftUp() {
-		synchronized (paintLiftWaitUP) {
-			liftup = true;
-			paintLiftWaitUP.notify();
-		}
-	}
-	public void botherConsolLiftDown() {
-		synchronized (paintLiftWaitDown) {
-			liftDown = true;
-			paintLiftWaitDown.notify();
-		}
-	}
-    
+
 }

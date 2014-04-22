@@ -1,10 +1,10 @@
 package epamlab.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Scrollbar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +13,9 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JTextArea;
 import javax.swing.Timer;
 
 import epamlab.constant.ConstantElevator;
@@ -21,7 +23,7 @@ import epamlab.container.Floor;
 import epamlab.people.Controller;
 import epamlab.people.Passenger;
 
-public class BuildingGraphics extends JPanel implements ActionListener {
+public class BuildingGraphics extends JComponent /*JPanel*/ implements ActionListener {
 	Timer buildintimer = new Timer(30, this);
 	private Controller controller;
 	private List<Floor> floors = new ArrayList();
@@ -36,10 +38,14 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 
 	public BuildingGraphics(List<Floor> floors, Controller controller, JButton start) {
 		super();
-        Dimension size=new Dimension(740,(ConstantElevator.storiesNumber*200)-200);
+
 		setLayout(new BorderLayout());
+		//JScrollBar scroll=new JScrollBar(Scrollbar.VERTICAL,0,0,0,0);
+		// add(scroll,BorderLayout.EAST);
+		// ----------------------------------
+		Rectangle rect = new Rectangle(0, 200, 747, 514);
 		//setFocusable(true);
-		setPreferredSize(size);
+		setPreferredSize(getMaximumSize());
 		this.floors = floors;
 		this.controller = controller;
 		this.start = start;
@@ -56,11 +62,13 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 
 		}
 
-		if (controller.open()/*|| !controller.isFloorEmpty()||!controller.getElevator().getElevatorContainer().isEmpty()*/) {
-			g.drawImage(controller.getElevator().imgLiftOpen, 2,
+		if (!controller.isFloorEmpty()
+				|| !controller.getElevator().getElevatorContainer().isEmpty()) {
+			g.drawImage(controller.getElevator().imgLiftOpen, 0,
 					controller.liftY, null);
-		} else if (!controller.open() /*||!controller.isFloorEmpty()||!controller.getElevator().getElevatorContainer().isEmpty() */ ) {
-			g.drawImage(controller.getElevator().imgLiftClose, 2,
+		} else if (!controller.isFloorEmpty()
+				|| !controller.getElevator().getElevatorContainer().isEmpty()) {
+			g.drawImage(controller.getElevator().imgLiftClose, 0,
 					controller.liftY, null);
 		}
 
@@ -103,8 +111,6 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 		}
 		controller.botherConsol();
 		controller.botherConsolOut();
-		controller.botherConsolLiftUp();
-		controller.botherConsolLiftDown();
 		repaint();
 
 	}
