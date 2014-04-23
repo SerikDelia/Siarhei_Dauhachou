@@ -13,7 +13,7 @@ public class Passenger {
 	public int y = 0;
 	private String transportationState;
 	public Image imgPassenger = new ImageIcon(
-			"src/Resurces/Pictures/teeeest.gif").getImage();
+			"src/Resurces/Pictures/Zubila_Shield.gif").getImage();
 	public Image imgPassenArrived = new ImageIcon(
 			"src/Resurces/Pictures/warcraft.gif").getImage();
 

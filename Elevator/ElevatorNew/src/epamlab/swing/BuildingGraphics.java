@@ -26,7 +26,7 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 	private Controller controller;
 	private List<Floor> floors = new ArrayList();
 	private JButton start;
-
+    Image levelView= new ImageIcon("src/Resurces/Pictures/fon.jpg").getImage();
 	Image imgBuilding = new ImageIcon("src/Resurces/Pictures/Floor.jpg")
 			.getImage();
 	Scrollbar scroll;
@@ -51,7 +51,9 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 		int i = 0;
 		for (; i != ConstantElevator.storiesNumber; i++) {
 
-			g.drawImage(imgBuilding, 0, y * i, null);
+			
+			g.drawImage(imgBuilding, 0, y * i,null);
+			g.drawImage(levelView,200, y * i,700,120,null);
 
 		}
 
@@ -64,13 +66,13 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 		}
 
 		synchronized (controller.getElevator().getElevatorContainer()) {
-
+               
 			for (Passenger p : controller.getElevator().getElevatorContainer()) {
-
+                   
 				if (p.getDestinationStory() == controller.getCurentLeve()) {
-
+                   
 					g.drawImage(p.imgPassenArrived,
-							((260 + p.getPassengerId()) - 250) + p.getX(),
+							((260 + p.getPassengerId()) - 285) + p.getX(),
 							ConstantElevator.storiesNumber * 200
 									- (200 * p.getDestinationStory()), 100,
 							159, null);
