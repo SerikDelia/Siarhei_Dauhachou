@@ -1,6 +1,7 @@
 package epamlab.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,7 +23,7 @@ import epamlab.people.Controller;
 import epamlab.people.Passenger;
 
 public class BuildingGraphics extends JPanel implements ActionListener {
-	Timer buildintimer = new Timer(30, this);
+	Timer buildintimer = new Timer(10, this);
 	private Controller controller;
 	private List<Floor> floors = new ArrayList();
 	private JButton start;
@@ -55,6 +56,8 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 	public void paint(Graphics g) {
 		g = (Graphics2D) g;
 		int i = 0;
+		//It does paint levels;
+		
 		for (; i != ConstantElevator.storiesNumber; i++) {
 
 			
@@ -69,7 +72,9 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			g.drawImage(fireLevel,460, (y * i),120,150,null);
 		}
 
-		if (controller.open()) {
+		//It does paint the opened door if method getOpen returns true else it does paint the closed door.
+		
+		if (controller.getOpen()) {
 			g.drawImage(controller.getElevator().imgLiftOpen, 2,
 					controller.liftY, null);
 			g.drawImage(skinDoorL,10, controller.liftY+5,55,198,null);
@@ -77,7 +82,7 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			g.drawImage(portal,40,
 					controller.liftY+3,130,180,null);
 			
-		} else if (!controller.open()) {
+		} else if (!controller.getOpen()) {
 			
 			g.drawImage(controller.getElevator().imgLiftClose, 2,
 					controller.liftY, null);
@@ -85,8 +90,26 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			g.drawImage(lableLevelLift,105, controller.liftY+5,95,193,null);
 			g.drawImage(fireLift,30, controller.liftY+50,45,65,null);
 			g.drawImage(fireLift,130, controller.liftY+50,45,65,null);
+	        g.drawString("AMOUNT PASSENGERS "+controller.getElevator().getElevatorContainer().size(),5,controller.liftY-3);
 		}
 
+		
+		 //It does paint amount passengers what gone from elevator. 
+		
+		for (Floor f : floors) {
+			synchronized (f.getArrivalStoryContainer()) {
+				for (Passenger p : f.getArrivalStoryContainer()) {	
+					g.drawString("ARRIVED PASSENGERS ON FLOOR ¹ "+p.getDestinationStory()+" AMOUNT"+f.getArrivalStoryContainer().size(),450,(ConstantElevator.storiesNumber * 200)+195
+							- (200 * p.getDestinationStory()));
+							
+
+				}
+			}
+
+		}
+		
+		//It does paint passengers what need go from elevator
+		
 		synchronized (controller.getElevator().getElevatorContainer()) {
                
 			for (Passenger p : controller.getElevator().getElevatorContainer()) {
@@ -104,6 +127,8 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			}
 		}
 
+	    //It does paint passengers on levels. 
+				
 		for (Floor f : floors) {
 			synchronized (f.getDispatchStoryContainer()) {
 				for (Passenger p : f.getDispatchStoryContainer()) {

@@ -43,7 +43,7 @@ public class Controller {
 	}
 
 	
-	public boolean open(){
+	public boolean getOpen(){
 		return open;
 	}
 	
