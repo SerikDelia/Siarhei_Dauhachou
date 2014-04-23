@@ -33,6 +33,8 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 	Image fireLevel= new ImageIcon("src/Resurces/Pictures/fire.gif").getImage();
 	Image lableLevel= new ImageIcon("src/Resurces/Pictures/lable.gif").getImage();
 	Image lableLevelLift= new ImageIcon("src/Resurces/Pictures/Q3Cover.jpg").getImage();
+	Image skinDoorR= new ImageIcon("src/Resurces/Pictures/Q3CoverR.jpg").getImage();
+	Image skinDoorL= new ImageIcon("src/Resurces/Pictures/Q3CoverL.jpg").getImage();
 	Scrollbar scroll;
 	List<Image> full = new ArrayList();
 	Graphics g=null;
@@ -61,8 +63,8 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			g.drawImage(lableLevel,200, y * i,70,70,null);
 			g.drawImage(lableLevel,400, y * i,70,70,null);
 			g.drawImage(lableLevel,600, y * i,70,70,null);
-			g.drawImage(lableLevelLift,20, (y * i)+20,70,70,null);
-			g.drawImage(lableLevelLift,120, (y * i)+20,70,70,null);
+			g.drawImage(lableLevelLift,5, (y * i)+2,95,198,null);
+			g.drawImage(lableLevelLift,105, (y * i)+2,95,198,null);
 			g.drawImage(fireLevel,250, (y * i),120,150,null);
 			g.drawImage(fireLevel,460, (y * i),120,150,null);
 		}
@@ -70,15 +72,17 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 		if (controller.open()) {
 			g.drawImage(controller.getElevator().imgLiftOpen, 2,
 					controller.liftY, null);
+			g.drawImage(skinDoorL,10, controller.liftY+5,55,198,null);
+			g.drawImage(skinDoorR,120, controller.liftY+5,80,198,null);
 			g.drawImage(portal,40,
-					controller.liftY+20,130,180,null);
+					controller.liftY+3,130,180,null);
 			
 		} else if (!controller.open()) {
 			
 			g.drawImage(controller.getElevator().imgLiftClose, 2,
 					controller.liftY, null);
-			g.drawImage(lableLevelLift,20, controller.liftY+20,70,70,null);
-			g.drawImage(lableLevelLift,120, controller.liftY+20,70,70,null);
+			g.drawImage(lableLevelLift,4, controller.liftY+5,95,193,null);
+			g.drawImage(lableLevelLift,105, controller.liftY+5,95,193,null);
 			g.drawImage(fireLift,30, controller.liftY+50,45,65,null);
 			g.drawImage(fireLift,130, controller.liftY+50,45,65,null);
 		}
