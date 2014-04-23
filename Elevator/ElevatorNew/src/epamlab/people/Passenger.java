@@ -9,12 +9,12 @@ public class Passenger {
 	private int startStory = 0;
 	private int destinationStory = 0;
 	private int passengerId;
-	public int x = 0;
-	public int y = 0;
+	private int passengerX = 0;
+	private int passengerY = 0;
 	private String transportationState;
-	public Image imgPassenger = new ImageIcon(
+	private static Image imgPassengerOnFloor = new ImageIcon(
 			"src/Resurces/Pictures/Zubila_Shield.gif").getImage();
-	public Image imgPassenArrived = new ImageIcon(
+	private static Image imgPassenArrived = new ImageIcon(
 			"src/Resurces/Pictures/div_knight_run.gif").getImage();
 
 	public Passenger() {
@@ -32,14 +32,38 @@ public class Passenger {
 
 	}
 
+	public int getPassengerX(){
+		return passengerX;
+	}
+	
+	public void setPassengerX(int passengerX){
+		this.passengerX=passengerX;
+	}
+	
+	public int getPassengerY(){
+		return passengerY;
+	}
+	
+	public void setPassengerY(int passengerY){
+		this.passengerY=passengerY;
+	}
+	
+	public static Image getImgPassengerOnFloor(){
+		return imgPassengerOnFloor;
+	}
+	
+	public static Image getimgPassenArrived(){
+		return imgPassenArrived;
+	}
+	
 	public void setX(int x) {
 
-		this.x = x;
+		this.passengerX = x;
 	}
 
 	public int getX() {
 
-		return x;
+		return passengerX;
 	}
 
 	public String getTransportationState() {

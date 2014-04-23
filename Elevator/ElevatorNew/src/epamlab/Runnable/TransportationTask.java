@@ -3,7 +3,6 @@ package epamlab.Runnable;
 import org.apache.log4j.Logger;
 
 import epamlab.constant.ConstantElevator;
-import epamlab.container.Floor;
 import epamlab.people.Controller;
 import epamlab.people.Passenger;
 import epamlab.swing.MessageDailog;

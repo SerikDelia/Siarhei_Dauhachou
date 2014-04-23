@@ -27,19 +27,19 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 	private Controller controller;
 	private List<Floor> floors = new ArrayList();
 	private JButton start;
-    Image levelView= new ImageIcon("src/Resurces/Pictures/fon.jpg").getImage();
-	Image imgBuilding = new ImageIcon("src/Resurces/Pictures/Floor.jpg").getImage();
-	Image portal= new ImageIcon("src/Resurces/Pictures/portal.gif").getImage();
-	Image fireLift= new ImageIcon("src/Resurces/Pictures/ogon.gif").getImage();
-	Image fireLevel= new ImageIcon("src/Resurces/Pictures/fire.gif").getImage();
-	Image lableLevel= new ImageIcon("src/Resurces/Pictures/lable.gif").getImage();
-	Image lableLevelLift= new ImageIcon("src/Resurces/Pictures/Q3Cover.jpg").getImage();
-	Image skinDoorR= new ImageIcon("src/Resurces/Pictures/Q3CoverR.jpg").getImage();
-	Image skinDoorL= new ImageIcon("src/Resurces/Pictures/Q3CoverL.jpg").getImage();
-	Scrollbar scroll;
-	List<Image> full = new ArrayList();
-	Graphics g=null;
-	int y = 200;
+    private Image levelView= new ImageIcon("src/Resurces/Pictures/fon.jpg").getImage();
+    private Image imgBuilding = new ImageIcon("src/Resurces/Pictures/Floor.jpg").getImage();
+    private Image portal= new ImageIcon("src/Resurces/Pictures/portal.gif").getImage();
+    private Image fireLift= new ImageIcon("src/Resurces/Pictures/ogon.gif").getImage();
+    private Image fireLevel= new ImageIcon("src/Resurces/Pictures/fire.gif").getImage();
+    private Image lableLevel= new ImageIcon("src/Resurces/Pictures/lable.gif").getImage();
+    private Image lableLevelLift= new ImageIcon("src/Resurces/Pictures/Q3Cover.jpg").getImage();
+    private Image skinDoorR= new ImageIcon("src/Resurces/Pictures/Q3CoverR.jpg").getImage();
+    private Image skinDoorL= new ImageIcon("src/Resurces/Pictures/Q3CoverL.jpg").getImage();
+    private Scrollbar scroll;
+    private List<Image> full = new ArrayList();
+    private Graphics g=null;
+    private static final int sizeImegeFloor = 200;
 
 	public BuildingGraphics(List<Floor> floors, Controller controller, JButton start) {
 		super();
@@ -61,15 +61,15 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 		for (; i != ConstantElevator.storiesNumber; i++) {
 
 			
-			g.drawImage(imgBuilding, 0, y * i,null);
-			g.drawImage(levelView,200, y * i,700,120,null);
-			g.drawImage(lableLevel,200, y * i,70,70,null);
-			g.drawImage(lableLevel,400, y * i,70,70,null);
-			g.drawImage(lableLevel,600, y * i,70,70,null);
-			g.drawImage(lableLevelLift,5, (y * i)+2,95,198,null);
-			g.drawImage(lableLevelLift,105, (y * i)+2,95,198,null);
-			g.drawImage(fireLevel,250, (y * i),120,150,null);
-			g.drawImage(fireLevel,460, (y * i),120,150,null);
+			g.drawImage(imgBuilding, 0, sizeImegeFloor * i,null);
+			g.drawImage(levelView,200, sizeImegeFloor * i,700,120,null);
+			g.drawImage(lableLevel,200, sizeImegeFloor * i,70,70,null);
+			g.drawImage(lableLevel,400, sizeImegeFloor * i,70,70,null);
+			g.drawImage(lableLevel,600, sizeImegeFloor * i,70,70,null);
+			g.drawImage(lableLevelLift,5, (sizeImegeFloor * i)+2,95,198,null);
+			g.drawImage(lableLevelLift,105, (sizeImegeFloor * i)+2,95,198,null);
+			g.drawImage(fireLevel,250, (sizeImegeFloor * i),120,150,null);
+			g.drawImage(fireLevel,460, (sizeImegeFloor * i),120,150,null);
 		}
 
 		//It does paint the opened door if method getOpen returns true else it does paint the closed door.
@@ -90,7 +90,7 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			g.drawImage(lableLevelLift,105, controller.liftY+5,95,193,null);
 			g.drawImage(fireLift,30, controller.liftY+50,45,65,null);
 			g.drawImage(fireLift,130, controller.liftY+50,45,65,null);
-	        g.drawString("AMOUNT PASSENGERS "+controller.getElevator().getElevatorContainer().size(),5,controller.liftY-3);
+	        g.drawString("AMOUNT PASSENGERS "+controller.getElevator().getElevatorContainer().size(),5,controller.liftY-2);
 		}
 
 		
@@ -116,7 +116,7 @@ public class BuildingGraphics extends JPanel implements ActionListener {
                    
 				if (p.getDestinationStory() == controller.getCurentLeve()) {
                    
-					g.drawImage(p.imgPassenArrived,
+					g.drawImage(Passenger.getimgPassenArrived(),
 							((290 + p.getPassengerId()) - 285) + p.getX(),
 							(ConstantElevator.storiesNumber * 200)-20
 									- (200 * p.getDestinationStory()), 130,
@@ -132,10 +132,11 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 		for (Floor f : floors) {
 			synchronized (f.getDispatchStoryContainer()) {
 				for (Passenger p : f.getDispatchStoryContainer()) {
-					g.drawImage(p.imgPassenger, (260 + p.getPassengerId() * 10)
+					g.drawImage(Passenger.getImgPassengerOnFloor(), (260 + p.getPassengerId() * 10)
 							+ p.getX(), (ConstantElevator.storiesNumber * 200)
 							- (200 * p.getStartStory())+10, 120, 180, null);
-
+                    g.drawString("AMOUNT PASSENGERS ON FLOOR: "+f.getDispatchStoryContainer().size()+";",215,(ConstantElevator.storiesNumber * 200)
+							- (200 * p.getStartStory())+195);
 				}
 			}
 
