@@ -545,7 +545,9 @@ public class Controller {
 		
 		
 		currentFloor++;
+		if(ConstantElevator.animationBoost>0){
 		waitUpdatePainLiftUp();
+		}
 
 	}
 
@@ -553,8 +555,9 @@ public class Controller {
 	
 		
 		currentFloor--;
+		if(ConstantElevator.animationBoost>0){
 		waitUpdatePainLiftDown();
-
+		}
 	}
 
 	private boolean hasElevatorUp() {
