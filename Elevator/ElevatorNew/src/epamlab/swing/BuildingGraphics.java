@@ -27,8 +27,12 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 	private List<Floor> floors = new ArrayList();
 	private JButton start;
     Image levelView= new ImageIcon("src/Resurces/Pictures/fon.jpg").getImage();
-	Image imgBuilding = new ImageIcon("src/Resurces/Pictures/Floor.jpg")
-			.getImage();
+	Image imgBuilding = new ImageIcon("src/Resurces/Pictures/Floor.jpg").getImage();
+	Image portal= new ImageIcon("src/Resurces/Pictures/portal.gif").getImage();
+	Image fireLift= new ImageIcon("src/Resurces/Pictures/ogon.gif").getImage();
+	Image fireLevel= new ImageIcon("src/Resurces/Pictures/fire.gif").getImage();
+	Image lableLevel= new ImageIcon("src/Resurces/Pictures/lable.gif").getImage();
+	Image lableLevelLift= new ImageIcon("src/Resurces/Pictures/Q3Cover.jpg").getImage();
 	Scrollbar scroll;
 	List<Image> full = new ArrayList();
 	Graphics g=null;
@@ -54,15 +58,29 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			
 			g.drawImage(imgBuilding, 0, y * i,null);
 			g.drawImage(levelView,200, y * i,700,120,null);
-
+			g.drawImage(lableLevel,200, y * i,70,70,null);
+			g.drawImage(lableLevel,400, y * i,70,70,null);
+			g.drawImage(lableLevel,600, y * i,70,70,null);
+			g.drawImage(lableLevelLift,20, (y * i)+20,70,70,null);
+			g.drawImage(lableLevelLift,120, (y * i)+20,70,70,null);
+			g.drawImage(fireLevel,250, (y * i),120,150,null);
+			g.drawImage(fireLevel,460, (y * i),120,150,null);
 		}
 
 		if (controller.open()) {
 			g.drawImage(controller.getElevator().imgLiftOpen, 2,
 					controller.liftY, null);
+			g.drawImage(portal,40,
+					controller.liftY+20,130,180,null);
+			
 		} else if (!controller.open()) {
+			
 			g.drawImage(controller.getElevator().imgLiftClose, 2,
 					controller.liftY, null);
+			g.drawImage(lableLevelLift,20, controller.liftY+20,70,70,null);
+			g.drawImage(lableLevelLift,120, controller.liftY+20,70,70,null);
+			g.drawImage(fireLift,30, controller.liftY+50,45,65,null);
+			g.drawImage(fireLift,130, controller.liftY+50,45,65,null);
 		}
 
 		synchronized (controller.getElevator().getElevatorContainer()) {
@@ -72,10 +90,10 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 				if (p.getDestinationStory() == controller.getCurentLeve()) {
                    
 					g.drawImage(p.imgPassenArrived,
-							((260 + p.getPassengerId()) - 285) + p.getX(),
-							ConstantElevator.storiesNumber * 200
-									- (200 * p.getDestinationStory()), 100,
-							159, null);
+							((290 + p.getPassengerId()) - 285) + p.getX(),
+							(ConstantElevator.storiesNumber * 200)-20
+									- (200 * p.getDestinationStory()), 130,
+							190, null);
 
 				}
 
@@ -85,9 +103,9 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 		for (Floor f : floors) {
 			synchronized (f.getDispatchStoryContainer()) {
 				for (Passenger p : f.getDispatchStoryContainer()) {
-					g.drawImage(p.imgPassenger, (230 + p.getPassengerId() * 10)
+					g.drawImage(p.imgPassenger, (260 + p.getPassengerId() * 10)
 							+ p.getX(), (ConstantElevator.storiesNumber * 200)
-							- (200 * p.getStartStory()), 120, 180, null);
+							- (200 * p.getStartStory())+10, 120, 180, null);
 
 				}
 			}

@@ -15,7 +15,7 @@ public class Passenger {
 	public Image imgPassenger = new ImageIcon(
 			"src/Resurces/Pictures/Zubila_Shield.gif").getImage();
 	public Image imgPassenArrived = new ImageIcon(
-			"src/Resurces/Pictures/warcraft.gif").getImage();
+			"src/Resurces/Pictures/div_knight_run.gif").getImage();
 
 	public Passenger() {
 
