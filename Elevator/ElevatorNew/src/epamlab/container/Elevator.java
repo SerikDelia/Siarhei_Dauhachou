@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import epamlab.constant.ConstantElevator;
 import epamlab.people.Passenger;
 
 public class Elevator {

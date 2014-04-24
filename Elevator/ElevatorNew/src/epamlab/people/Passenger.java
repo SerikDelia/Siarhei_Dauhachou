@@ -17,6 +17,8 @@ public class Passenger {
 	private static Image imgPassenArrived = new ImageIcon(
 			"src/Resurces/Pictures/div_knight_run.gif").getImage();
 
+	private static Image imgAbortedPassengers=new ImageIcon("src/Resurces/Pictures/power_boy.gif").getImage();
+	
 	public Passenger() {
 
 	}
@@ -54,6 +56,10 @@ public class Passenger {
 	
 	public static Image getimgPassenArrived(){
 		return imgPassenArrived;
+	}
+	
+	public static Image getImgAbortedPassengers(){
+		return imgAbortedPassengers;
 	}
 	
 	public void setX(int x) {

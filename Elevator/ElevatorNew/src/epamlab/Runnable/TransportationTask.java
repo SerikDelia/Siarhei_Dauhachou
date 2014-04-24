@@ -65,7 +65,7 @@ public class TransportationTask implements Runnable {
 	}
 
 	/*
-	 * Metod stop(): The method is invoked when do push on button with label
+	 * Method stop(): The method is invoked when do push on button with label
 	 * 'ABORT'. The method do stop threads of transportationTask and interrupt
 	 * them.
 	 */

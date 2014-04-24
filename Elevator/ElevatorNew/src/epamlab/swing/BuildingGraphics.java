@@ -1,7 +1,6 @@
 package epamlab.swing;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import epamlab.Runnable.TransportationTask;
 import epamlab.constant.ConstantElevator;
 import epamlab.container.Floor;
 import epamlab.people.Controller;
@@ -36,10 +36,14 @@ public class BuildingGraphics extends JPanel implements ActionListener {
     private Image lableLevelLift= new ImageIcon("src/Resurces/Pictures/Q3Cover.jpg").getImage();
     private Image skinDoorR= new ImageIcon("src/Resurces/Pictures/Q3CoverR.jpg").getImage();
     private Image skinDoorL= new ImageIcon("src/Resurces/Pictures/Q3CoverL.jpg").getImage();
+    private Image prossecingAborted=new ImageIcon("src/Resurces/Pictures/ProssecingAborted.gif").getImage();
+    private Image prossecingSuccessful=new ImageIcon("src/Resurces/Pictures/passengersDelivered.gif").getImage();
+    private Image dancer=new ImageIcon("src/Resurces/Pictures/dancer.gif").getImage();
+    private Image playerGuitar=new ImageIcon("src/Resurces/Pictures/nezhirGuitar.gif").getImage();
     private Scrollbar scroll;
     private List<Image> full = new ArrayList();
     private Graphics g=null;
-    private static final int sizeImegeFloor = 200;
+    private static final int sizeImegeFloor =200;
 
 	public BuildingGraphics(List<Floor> floors, Controller controller, JButton start) {
 		super();
@@ -55,7 +59,7 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 
 	public void paint(Graphics g) {
 		g = (Graphics2D) g;
-		int i = 0;
+		int i =0;
 		//It does paint levels;
 		
 		for (; i != ConstantElevator.storiesNumber; i++) {
@@ -70,6 +74,7 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 			g.drawImage(lableLevelLift,105, (sizeImegeFloor * i)+2,95,198,null);
 			g.drawImage(fireLevel,250, (sizeImegeFloor * i),120,150,null);
 			g.drawImage(fireLevel,460, (sizeImegeFloor * i),120,150,null);
+			
 		}
 
 		//It does paint the opened door if method getOpen returns true else it does paint the closed door.
@@ -101,13 +106,14 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 				for (Passenger p : f.getArrivalStoryContainer()) {	
 					g.drawString("ARRIVED PASSENGERS ON FLOOR ¹ "+p.getDestinationStory()+" AMOUNT"+f.getArrivalStoryContainer().size(),450,(ConstantElevator.storiesNumber * 200)+195
 							- (200 * p.getDestinationStory()));
-							
-
+					
 				}
 			}
 
 		}
 		
+		//When not push button ABORT it's doing; 
+		if( !"ABORTED".equals(TransportationTask.getHandling())){
 		//It does paint passengers what need go from elevator
 		
 		synchronized (controller.getElevator().getElevatorContainer()) {
@@ -131,16 +137,91 @@ public class BuildingGraphics extends JPanel implements ActionListener {
 				
 		for (Floor f : floors) {
 			synchronized (f.getDispatchStoryContainer()) {
+				 g.drawString(""+f.getIdFloor()+"",631,(ConstantElevator.storiesNumber * 200)+42
+							- (200 * f.getIdFloor()));
+                 g.drawString(""+f.getIdFloor()+"",231,(ConstantElevator.storiesNumber * 200)+42
+							- (200 *f.getIdFloor()));
+                 g.drawString(""+f.getIdFloor()+"",431,(ConstantElevator.storiesNumber * 200)+42
+							- (200 *f.getIdFloor()));	
 				for (Passenger p : f.getDispatchStoryContainer()) {
 					g.drawImage(Passenger.getImgPassengerOnFloor(), (260 + p.getPassengerId() * 10)
 							+ p.getX(), (ConstantElevator.storiesNumber * 200)
 							- (200 * p.getStartStory())+10, 120, 180, null);
                     g.drawString("AMOUNT PASSENGERS ON FLOOR: "+f.getDispatchStoryContainer().size()+";",215,(ConstantElevator.storiesNumber * 200)
 							- (200 * p.getStartStory())+195);
+                   
+
 				}
 			}
 
 		}
+		if(ConstantElevator.passengersNumber==controller.getElevator().getCountGoingOut()){
+			int b=0;
+			for (; b != ConstantElevator.storiesNumber; b++) {
+				
+				g.drawImage(dancer,205, (sizeImegeFloor * b)+20,135,165,null);
+				g.drawImage(dancer,550, (sizeImegeFloor * b)+20,135,165,null);
+				g.drawImage(playerGuitar,350, (sizeImegeFloor * b)+20,135,170,null);
+				g.drawImage(prossecingSuccessful,160, (sizeImegeFloor * b)-70,500,200,null);
+			}
+			
+		}
+		
+	}
+		//When push button ABORT it's doing; 
+		else{
+		
+	   //It does paint passengers what need go from elevator
+		
+		synchronized (controller.getElevator().getElevatorContainer()) {
+               
+			for (Passenger p : controller.getElevator().getElevatorContainer()) {
+                   
+				if (p.getDestinationStory() == controller.getCurentLeve()) {
+                   
+					g.drawImage(Passenger.getImgAbortedPassengers(),
+							((290 + p.getPassengerId()) - 285) + p.getX(),
+							(ConstantElevator.storiesNumber * 200)+20
+									- (200 * p.getDestinationStory()), 130,
+							190, null);
+
+				}
+
+			}
+		}
+
+	    //It does paint passengers on levels. 
+				
+		for (Floor f : floors) {
+			g.drawString(""+f.getIdFloor()+"",631,(ConstantElevator.storiesNumber * 200)+42
+					- (200 * f.getIdFloor()));
+         g.drawString(""+f.getIdFloor()+"",231,(ConstantElevator.storiesNumber * 200)+42
+					- (200 *f.getIdFloor()));
+         g.drawString(""+f.getIdFloor()+"",431,(ConstantElevator.storiesNumber * 200)+42
+					- (200 *f.getIdFloor()));	
+			synchronized (f.getDispatchStoryContainer()) {
+				for (Passenger p : f.getDispatchStoryContainer()) {
+					g.drawImage(Passenger.getImgAbortedPassengers(), (260 + p.getPassengerId() * 10)
+							+ p.getX(), (ConstantElevator.storiesNumber * 200)
+							- (200 * p.getStartStory())+20, 120, 180, null);
+                    g.drawString("AMOUNT PASSENGERS ON FLOOR: "+f.getDispatchStoryContainer().size()+";",215,(ConstantElevator.storiesNumber * 200)
+							- (200 * p.getStartStory())+195);
+				}
+			}
+
+		}
+
+		//It does paint note that processing was aborted;
+		int b=0;
+		for (; b != ConstantElevator.storiesNumber; b++) {
+			
+			g.drawImage(prossecingAborted,10, (sizeImegeFloor * b),200,200,null);
+			g.drawImage(prossecingAborted,250, (sizeImegeFloor * b)-50,150,150,null);
+			g.drawImage(prossecingAborted,470, (sizeImegeFloor * b)-50,150,150,null);
+		}
+		
+		
+	}
 
 	}
 

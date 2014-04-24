@@ -740,12 +740,12 @@ public class Controller {
 				}
 			}
 			}else if(ConstantElevator.animationBoost % 2!=0 && ConstantElevator.animationBoost!=1 && ConstantElevator.animationBoost!=5 && ConstantElevator.animationBoost!=7){
-				
+				 int temp=ConstantElevator.animationBoost+1;
 				while (liftY!=currentYL) {
 						
 					open=false;				
 					
-					liftY=liftY-ConstantElevator.animationBoost+1;
+					liftY=liftY-temp;
 				
 					try {
 						paintLiftWaitUP.wait();
@@ -854,13 +854,13 @@ public class Controller {
 								.println("Thred was waitingStart when aborted prossecing");
 					}
 				}
-				}else if(ConstantElevator.animationBoost % 2!=0 && ConstantElevator.animationBoost!=1 && ConstantElevator.animationBoost!=5){
-					
+				}else if(ConstantElevator.animationBoost % 2!=0 && ConstantElevator.animationBoost!=1 && ConstantElevator.animationBoost!=5 && ConstantElevator.animationBoost!=7){
+					int temp=ConstantElevator.animationBoost-1;
 					while (liftY!=currentYL) {
 							
 						open=false;				
 						
-						liftY=liftY+ConstantElevator.animationBoost+1;
+						liftY=liftY+temp;
 					
 						try {
 							paintLiftWaitDown.wait();
@@ -872,6 +872,25 @@ public class Controller {
 					}
 					}else if(ConstantElevator.animationBoost==6){
 						int temp=ConstantElevator.animationBoost-1;
+						
+						while (liftY!=currentYL) {
+							
+							open=false;				
+							
+							liftY=liftY+temp;
+						
+							try {
+								paintLiftWaitDown.wait();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								System.err
+										.println("Thred was waitingStart when aborted prossecing");
+							}
+						}
+						
+						
+					}else if(ConstantElevator.animationBoost==7){
+						int temp=ConstantElevator.animationBoost+1;
 						
 						while (liftY!=currentYL) {
 							
